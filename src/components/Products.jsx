@@ -1,21 +1,27 @@
 import "./Products.css";
 import { AddToCartIcon } from "./Icons";
-import { products as productsJSON } from "../mocks/products.json";
+
 export default function Products({ products }) {
-  if (!products) products = productsJSON;
   return (
     <main className="products">
       {products.length === 0 ? (
         <p>No products found</p>
       ) : (
-        <ul style={{ display: "grid" }}>
+        <ul>
           {products.map((p) => (
             <li key={p.id}>
-              <h3>{p.title}</h3>
-              <img src={p.thumbnail} alt={p.title} />
-              <button>
-                <AddToCartIcon />
-              </button>
+              <div>
+                <h3>{p.title}</h3>
+                <strong>${p.price}</strong>
+              </div>
+              <div>
+                <img src={p.thumbnail} alt={p.title} />
+              </div>
+              <div>
+                <button>
+                  <AddToCartIcon />
+                </button>
+              </div>
             </li>
           ))}
         </ul>

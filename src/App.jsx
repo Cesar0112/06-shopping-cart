@@ -1,6 +1,7 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useId, useState } from "react";
 import Products from "./components/Products";
 import { products as initialProducts } from "./mocks/products.json";
+import { FiltersContext } from "./context/filters";
 function App() {
   const [products, setProducts] = useState(initialProducts);
 
@@ -9,10 +10,11 @@ function App() {
     .filter((category, index, self) => self.indexOf(category) === index);
 
   const [filteredProducts, setFilteredProducts] = useState(products);
-  const [filters, setFilters] = useState({
-    category: "all",
-    minPrice: 0,
-  });
+
+  const { filters, setFilters } = useContext(FiltersContext);
+
+  const minPriceId = useId();
+  const categoryId = useId();
   const handleChangeMinPrice = (e) => {
     setFilters((prev) => {
       const newFilters = {
@@ -47,20 +49,32 @@ function App() {
     <main>
       <h1>Shopping cart</h1>
       <h3>Filtros</h3>
-      <input
-        type="number"
-        name="minPrice"
-        id="minPrice"
-        value={filters.minPrice}
-        onChange={handleChangeMinPrice}
-        min={0}
-      />
-
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "center",
+        }}
+      >
+        <label htmlFor={minPriceId}>Precio mínimo:</label>
+        <input
+          type="range"
+          name="minPrice"
+          id={minPriceId}
+          onChange={handleChangeMinPrice}
+          min={0}
+          value={filters.minPrice}
+          max={2000}
+        />
+        <p>{filters.minPrice}</p>
+        <p> - </p>
+        <p>2000</p>
+      </div>
       <select
         name="categories"
-        id="categories"
-        value={filters.category}
+        id={categoryId}
         onChange={handleChangeCategory}
+        value={filters.category}
       >
         {allCategories &&
           allCategories.map((categ) => <option value={categ}>{categ}</option>)}
